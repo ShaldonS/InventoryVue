@@ -18,7 +18,7 @@
   import { defineComponent, onMounted, ref } from 'vue';
   import { useInventoryStore } from '../store/inventoryStore';
   import InventoryItem from '../components/InventoryItem.vue';
-  import ItemModal from '../components/ItemModal.vue'; // Импорт нового компонента
+  import ItemModal from '../components/ItemModal.vue'; 
   
   export default defineComponent({
     components: { InventoryItem, ItemModal },
@@ -32,12 +32,12 @@
   
       const addItem = (name: string, description: string) => {
         const newItem = {
-          id: Date.now(), // Используем timestamp как уникальный ID
+          id: Date.now(), 
           name,
           description,
         };
         store.addItem(newItem);
-        showModal.value = false; // Закрыть модальное окно после добавления
+        showModal.value = false; 
       };
   
       return {
