@@ -2,10 +2,10 @@
     <div class="modal">
       <div class="modal-content">
         <span class="close" @click="$emit('close')">&times;</span>
-        <div class="colored-square" :style="{ backgroundcolor: /*item.color*/ white }"></div>
+        <div class="colored-square" :style="{'background-color':item.color}"></div>
         <hr>
-        <!--<p >{{ item.name }}</p>
-        <p >{{ item.description }}</p>-->
+        <p>{{ item.name }}</p>
+        <p>{{ item.description }}</p>
         <hr>
         <button @click="isDelete = true" v-if="!isDelete">Удалить предмет</button>
         <div class="buttons" v-if="isDelete">
@@ -31,8 +31,22 @@
       const isDelete = ref(false);
 
       const removeItem = () => {
+        console.log('removeItem');
+        
         emit('removeItem', props.item.id);
         isDelete.value = false;
+
+
+      const closeBtn = document.querySelector('.close');
+      const clickEvent = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true
+      });
+      if(closeBtn){
+        closeBtn.dispatchEvent(clickEvent);
+      }
+
       }
   
       return {
@@ -84,11 +98,10 @@
     width: 10em;
     height: 10em;
     margin: 0 auto;
-    background-color: white;
   }
 
-  .buttons {
-    
+  p {
+   color: white; 
   }
 
   button {

@@ -14,7 +14,7 @@
                 <div class="skeleton-loader vertical-loader"></div>
             </div>
             <div class="inventory-grid">
-    <ItemModalInfo v-if="showModalInfo" @close="showModalInfo = false" @removeItem="removeItem" :item="getDraggedItem"/>
+    <ItemModalInfo v-if="showModalInfo" @close="showModalInfo = false" @removeItem="removeItem" :item="selectedItem"/>
                 <div
                     class="grid-cell"
                     v-for="(cell, index) in grid"
@@ -25,7 +25,7 @@
                         v-if="checkItem(cell)"
                         :key="cell.item.id"
                         :item="cell.item"
-                        @click="showModalInfo = true"
+                        @click="showModalInfo = false;showModalInfo = true;selectedItem = cell.item"
                         draggable="true"
                         @dragstart="handleDragStart($event, cell.item)"
                     />
@@ -63,6 +63,7 @@ export default defineComponent({
             color : '',
         };
         const draggedItem = ref<Item>(tempItem);
+        const selectedItem = ref<Item>(tempItem);
 
         const grid = ref<Cell[]>(Array(50).fill(null).map(() => ({ item: tempItem })));
 
@@ -83,9 +84,7 @@ export default defineComponent({
             return cell.item !== tempItem;
         }
 
-        const getDraggedItem = () => {
-            console.log("getDraggedItem");
-            
+        const getDraggedItem = () => {            
             return draggedItem;
         }
 
@@ -128,8 +127,9 @@ export default defineComponent({
         };
 
         const removeItem = (id: number) => {
-            grid.value.find(cell => cell.item.id === id)!.item = tempItem;
-            store.removeItem(id);
+            if(store.removeItem(id)) {
+                grid.value.find(cell => cell.item.id === id)!.item = tempItem;
+            }
         };
 
         return {

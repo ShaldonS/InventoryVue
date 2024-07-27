@@ -25,8 +25,22 @@ export const useInventoryStore = defineStore('inventory', {
     },
     removeItem(id: number) {
       console.log(`Remove item ${id}`);
-      this.items = this.items.filter(item => item.id !== id); 
-      this.saveToLocalStorage();
+      const item = this.items.find(itm => itm.id === id);
+      let removed = false;
+      if(item) {
+      console.log('item.count = ', item.count );
+
+        if(item.count != 1) {
+            item.count--;
+        }
+        else {
+            this.items = this.items.filter(itm => itm.id !== id); 
+            removed = true;
+        }
+        this.saveToLocalStorage();
+
+        return removed;
+      }
     },
     findItem(name: string, description: string) {
         return this.items.find(itm => itm.name === name && itm.description === description)!;
