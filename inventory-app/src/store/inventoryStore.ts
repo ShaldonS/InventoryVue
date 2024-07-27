@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 
-interface InventoryItem {
+export interface InventoryItem {
   id: number;
   name: string;
   description: string;
+  count: number;
+  color: string;
 }
 
 export const useInventoryStore = defineStore('inventory', {
@@ -16,8 +18,14 @@ export const useInventoryStore = defineStore('inventory', {
       this.saveToLocalStorage();
     },
     removeItem(id: number) {
-      this.items = this.items.filter(item => item.id !== id);
+      this.items = this.items.filter(item => item.id !== id); 
       this.saveToLocalStorage();
+    },
+    findItem(name: string, description: string) {
+        return this.items.find(itm => itm.name === name && itm.description === description)!;
+    },
+    uodateItemCount(item : InventoryItem) {
+        this.items.find(itm => itm.id === item.id)!.count++;
     },
     loadFromLocalStorage() {
       const storedItems = localStorage.getItem('inventory-items');

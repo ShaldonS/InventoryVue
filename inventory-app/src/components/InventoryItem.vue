@@ -1,52 +1,57 @@
 <template>
-    <div class="inventory-item" @click="toggleDescription">
-      <h2>{{ item.name }}</h2>
-      <div v-if="showDescription" class="description">
-        <p>{{ item.description }}</p>
-        <button @click.stop="removeItem(item.id)">Удалить</button>
-      </div>
+    <div class="inventory-item">
+      <div class="colored-square" :style="{ backgroundColor: item.color }"></div>
+      <span class="item-count">{{ item.count }}</span>
+      <button @click="removeItem(item.id)">Удалить</button>
     </div>
   </template>
   
   <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent } from 'vue';
+  import { InventoryItem as InventoryItemType } from '../store/inventoryStore';
   
   export default defineComponent({
     props: {
       item: {
-        type: Object,
+        type: Object as () => InventoryItemType,
         required: true,
       },
     },
     setup(props, { emit }) {
-      const showDescription = ref(false);
-  
-      function toggleDescription() {
-        showDescription.value = !showDescription.value;
-      }
-  
       function removeItem(id: number) {
         emit('remove', id);
       }
   
-      return {
-        showDescription,
-        toggleDescription,
-        removeItem,
-      };
+      return { removeItem };
     },
   });
   </script>
   
   <style scoped>
   .inventory-item {
-    cursor: pointer;
-    margin: 10px;
-  }
-  .description {
-    background-color: #f9f9f9;
+    background-color: #333;
+    border: 1px solid #999;
     padding: 10px;
-    border: 1px solid #ddd;
+    position: relative;
+    text-align: center;
+    width: 82px;
+    height: 82px; 
+  }
+  
+  .colored-square {
+    /*background-color: #9ce79c;*/
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+  }
+  
+  .item-count {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #ff0000;
+    color: #fff;
+    padding: 2px 5px;
+    border-radius: 5px;
   }
   </style>
-  

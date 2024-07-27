@@ -25,6 +25,14 @@
           itemDescription.value = '';
         }
       };
+
+      const deleteItem = () => {
+        if (itemName.value && itemDescription.value) {
+          emit('addItem', itemName.value, itemDescription.value);
+          itemName.value = '';
+          itemDescription.value = '';
+        }
+      }
   
       return {
         itemName,
@@ -42,10 +50,11 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #262626;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 100;
   }
   
   .modal-content {
