@@ -20,6 +20,8 @@
   
       const submitItem = () => {
         if (itemName.value && itemDescription.value) {
+      console.log(`new item ${itemName.value}`);
+            
           emit('addItem', itemName.value, itemDescription.value);
           itemName.value = '';
           itemDescription.value = '';

@@ -1,8 +1,9 @@
 <template>
-    <div class="inventory-item">
-      <div class="colored-square" :style="{ backgroundColor: item.color }"></div>
-      <span class="item-count">{{ item.count }}</span>
-      <button @click="removeItem(item.id)">Удалить</button>
+    <div class="inventory-box">
+        <div class="inventory-item">
+            <div class="colored-square" :style="{ backgroundColor: item.color }"></div>
+        </div>
+        <span class="item-count">{{ item.count }}</span>
     </div>
   </template>
   
@@ -17,41 +18,42 @@
         required: true,
       },
     },
-    setup(props, { emit }) {
-      function removeItem(id: number) {
-        emit('remove', id);
-      }
-  
-      return { removeItem };
-    },
   });
   </script>
   
   <style scoped>
+  .inventory-box {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column-reverse;
+  }
+
   .inventory-item {
-    background-color: #333;
-    border: 1px solid #999;
     padding: 10px;
     position: relative;
     text-align: center;
     width: 82px;
     height: 82px; 
   }
+  .inventory-item:hover {
+    cursor: pointer;
+    background-color: grey;
+  }
   
   .colored-square {
-    /*background-color: #9ce79c;*/
-    width: 40px;
-    height: 40px;
+    width: 65px;
+    height: 65px;
     margin: 0 auto;
   }
   
   .item-count {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: #ff0000;
-    color: #fff;
+    color: grey;
     padding: 2px 5px;
-    border-radius: 5px;
+    border-left: 1px solid;
+    border: 1px solid;
+    border-top-left-radius: 10px;
+    z-index: 2;
+    background-color: #333;
   }
   </style>

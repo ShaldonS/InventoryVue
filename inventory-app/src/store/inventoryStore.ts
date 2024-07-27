@@ -18,10 +18,13 @@ export const useInventoryStore = defineStore('inventory', {
   }),
   actions: {
     addItem(item: InventoryItem) {
+      console.log(`new item ${item}`);
+
       this.items.push(item);
       this.saveToLocalStorage();
     },
     removeItem(id: number) {
+      console.log(`Remove item ${id}`);
       this.items = this.items.filter(item => item.id !== id); 
       this.saveToLocalStorage();
     },

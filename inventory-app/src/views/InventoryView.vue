@@ -110,11 +110,12 @@ export default defineComponent({
             event.preventDefault();
             if (draggedItem.value) {
                 const targetCell = grid.value[index];
+
+                grid.value.find(cell => cell.item === draggedItem.value)!.item = targetCell.item;
                 targetCell.item = draggedItem.value;
 
-                grid.value.find(cell => cell.item === draggedItem.value)!.item = tempItem;
 
-                //draggedItem.value = ;
+                draggedItem.value = tempItem;
             }
         };
 
@@ -167,9 +168,9 @@ img {
 }
 
 .grid-cell {
-    border: 2px dashed #4D4D4D;
-    padding: 10px;
-    width: calc(25% - 24px);
+    background-color: #333;
+    border: 1px solid grey;
+    width: calc(25% - 28px);
     min-height: 100px;
     position: relative;
 }
