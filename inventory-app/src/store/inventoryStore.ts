@@ -18,7 +18,7 @@ export const useInventoryStore = defineStore('inventory', {
   }),
   actions: {
     addItem(item: InventoryItem) {
-      console.log(`new item ${item}`);
+      console.log(`addItem ${item}`);
 
       this.items.push(item);
       this.saveToLocalStorage();

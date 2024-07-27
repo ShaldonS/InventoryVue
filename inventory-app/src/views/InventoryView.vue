@@ -1,6 +1,6 @@
 <template>
     <button @click="showModal = true">Создать новый предмет</button>
-    <ItemModal v-if="showModal" @close="showModal = false" @addItem="addItem" />
+    <ItemModal v-if="showModal" @close="showModal = false" @addItem="addItem"/>
     <div class="inventory-container">
         <div class="inventory-data">
             <div class="user-info">
@@ -14,6 +14,7 @@
                 <div class="skeleton-loader vertical-loader"></div>
             </div>
             <div class="inventory-grid">
+    <ItemModalInfo v-if="showModalInfo" @close="showModalInfo = false" @removeItem="removeItem" :item="getDraggedItem"/>
                 <div
                     class="grid-cell"
                     v-for="(cell, index) in grid"
@@ -24,7 +25,7 @@
                         v-if="checkItem(cell)"
                         :key="cell.item.id"
                         :item="cell.item"
-                        @remove="removeItem"
+                        @click="showModalInfo = true"
                         draggable="true"
                         @dragstart="handleDragStart($event, cell.item)"
                     />
@@ -40,9 +41,10 @@ import { defineComponent, onMounted, ref } from "vue";
 import { useInventoryStore, InventoryItem as Item, Cell } from "../store/inventoryStore";
 import InventoryItem from "../components/InventoryItem.vue";
 import ItemModal from '../components/ItemModal.vue';
+import ItemModalInfo from '../components/ItemModalInfo.vue';
 
 export default defineComponent({
-    components: { InventoryItem, ItemModal },
+    components: { InventoryItem, ItemModal, ItemModalInfo },
     methods: {
         checkItem (cell : Cell) {
             return cell.item.count !== -1;
@@ -51,6 +53,7 @@ export default defineComponent({
     setup() {
         const store = useInventoryStore();
         const showModal = ref(false);
+        const showModalInfo = ref(false);
         const inventoryItems = ref(store.items);
         const tempItem = {
             id: Date.now(),
@@ -62,7 +65,6 @@ export default defineComponent({
         const draggedItem = ref<Item>(tempItem);
 
         const grid = ref<Cell[]>(Array(50).fill(null).map(() => ({ item: tempItem })));
-
 
         onMounted(() => {
             store.loadFromLocalStorage();
@@ -79,6 +81,12 @@ export default defineComponent({
 
         function checkItem (cell : Cell) {
             return cell.item !== tempItem;
+        }
+
+        const getDraggedItem = () => {
+            console.log("getDraggedItem");
+            
+            return draggedItem;
         }
 
         const addItem = (name: string, description: string) => {
@@ -120,19 +128,16 @@ export default defineComponent({
         };
 
         const removeItem = (id: number) => {
-            /*grid.value.forEach(cell => {
-                const index = cell.items.findIndex(item => item.id === id);
-                if (index !== -1) {
-                    cell.items.splice(index, 1); // Удаляем элемент из ячейки
-                }
-            });*/
+            grid.value.find(cell => cell.item.id === id)!.item = tempItem;
+            store.removeItem(id);
         };
 
         return {
             grid,
-            removeItem,
             showModal,
+            showModalInfo,
             addItem,
+            removeItem,
             handleDragStart,
             handleDrop,
         };
@@ -160,17 +165,10 @@ img {
     margin: auto;
 }
 
-.inventory-grid {
-    display: flex;
-    flex-wrap: wrap;
-    width: 80%;
-    overflow-y: auto;
-}
-
 .grid-cell {
     background-color: #333;
     border: 1px solid grey;
-    width: calc(25% - 28px);
+    width: calc(25% - 29px);
     min-height: 100px;
     position: relative;
 }
@@ -238,6 +236,12 @@ align-content: flex-start;
 flex-wrap: wrap;
 flex-direction: row;
 border-radius: 10px;
+overflow-y: auto;
+justify-content: flex-end;
+}
+
+.inventory-grid::-webkit-scrollbar {
+    display: none;
 }
 
 .grid {

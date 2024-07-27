@@ -1,6 +1,6 @@
 <template>
     <div class="inventory-box">
-        <div class="inventory-item">
+        <div class="inventory-item" >
             <div class="colored-square" :style="{ backgroundColor: item.color }"></div>
         </div>
         <span class="item-count">{{ item.count }}</span>
