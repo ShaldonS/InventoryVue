@@ -8,6 +8,10 @@ export interface InventoryItem {
   color: string;
 }
 
+export interface Cell {
+    item: InventoryItem;
+}
+
 export const useInventoryStore = defineStore('inventory', {
   state: () => ({
     items: [] as InventoryItem[],
@@ -24,7 +28,7 @@ export const useInventoryStore = defineStore('inventory', {
     findItem(name: string, description: string) {
         return this.items.find(itm => itm.name === name && itm.description === description)!;
     },
-    uodateItemCount(item : InventoryItem) {
+    updateItemCount(item : InventoryItem) {
         this.items.find(itm => itm.id === item.id)!.count++;
     },
     loadFromLocalStorage() {

@@ -17,19 +17,19 @@
     setup(_, { emit }) {
       const itemName = ref('');
       const itemDescription = ref('');
-  
-      const submitItem = () => {
+
+      const removeItem = () => {
         if (itemName.value && itemDescription.value) {
-          emit('addItem', itemName.value, itemDescription.value);
+          emit('removeItem', itemName.value, itemDescription.value);
           itemName.value = '';
           itemDescription.value = '';
         }
-      };
+      }
   
       return {
         itemName,
         itemDescription,
-        submitItem,
+        removeItem,
       };
     },
   });
